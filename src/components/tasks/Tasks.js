@@ -2,15 +2,21 @@ import React from 'react';
 import './tasks.css';
 import Collapsible from '../collapsible/Collapsible';
 import { useState } from 'react';
+import {useSelector} from 'react-redux'
+ 
+ 
 
 const Tasks = () => {
-  let [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
-  let onSaveClick = () => {
+  const tasks = useSelector(state => state.tasks)
+
+  const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
+
+  const onSaveClick = () => {
     setIsNewTaskOpen(!isNewTaskOpen);
   };
 
-  let onCancelClick = () => {
+  const onCancelClick = () => {
     setIsNewTaskOpen(!isNewTaskOpen);
   };
   return (
@@ -98,46 +104,25 @@ const Tasks = () => {
 
         <div className='content-body'>
           {/* task starts */}
-          <div className='task'>
+          {tasks.map(task=><div className='task' key={task.id} >
             <div className='task-body'>
               <div className='task-title'>
                 <i className='fa fa-thumbtack'></i>
-                <span className='task-title-text'>Bob's Appointment</span>
+                <span className='task-title-text'>{task.taskTitle}</span>
               </div>
               <div className='task-subtitle'>
                 <i className='far fa-clock'></i>{' '}
-                <span className='task-subtitle-text'>Jul 16th at 9:30am</span>
+                <span className='task-subtitle-text'> {task.taskDateTime}</span>
               </div>
             </div>
-
             <div className='task-options'>
               <button className='icon-button' title='Delete'>
                 &times;
               </button>
             </div>
-          </div>
+          </div>)}
           {/* task ends */}
-
-          {/* task starts */}
-          <div className='task'>
-            <div className='task-body'>
-              <div className='task-title'>
-                <i className='fa fa-thumbtack'></i>
-                <span className='task-title-text'>Project Presentation</span>
-              </div>
-              <div className='task-subtitle'>
-                <i className='far fa-clock'></i>{' '}
-                <span className='task-subtitle-text'>Jul 17th at 11:15am</span>
-              </div>
-            </div>
-
-            <div className='task-options'>
-              <button className='icon-button' title='Delete'>
-                &times;
-              </button>
-            </div>
-          </div>
-          {/* task ends */}
+          
         </div>
       </div>
     </div>
