@@ -1,6 +1,7 @@
  import { tasksReducer } from './tasks-reducer';
- import {combineReduces} from './redux';
+ import {combineReducers} from 'redux'
 
- const allReducers=combineReduces({tasksReducer});
+ const allReducers=combineReducers({tasks:tasksReducer});
 
  export default allReducers;
+  
