@@ -2,23 +2,54 @@ import React from 'react';
 import './tasks.css';
 import Collapsible from '../collapsible/Collapsible';
 import { useState } from 'react';
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch } from 'react-redux'
+import actions from '../../actions';
+import {toDisplayableDateFormat} from   "../../utils";
+ 
+  
+ 
  
  
 
 const Tasks = () => {
-
+//get state from redux store
   const tasks = useSelector(state => state.tasks)
 
+//state
+  const [taskTitle, setTaskTitle]=useState('');
+  const [taskDateTime, setTaskDateTime]=useState('');
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
+
+  //create dispatch fucntion
+   const dispatch = useDispatch();
+
+
   const onSaveClick = () => {
+    //dispatch
+    dispatch(actions.createTask({
+      id:Math.floor(Math.random()*1000000),
+      taskTitle,
+      taskDateTime
+    }))
+
+     //clear
+     setTaskTitle("");
+     setTaskDateTime("");
     setIsNewTaskOpen(!isNewTaskOpen);
   };
 
   const onCancelClick = () => {
     setIsNewTaskOpen(!isNewTaskOpen);
   };
+
+const onDeleteClick=(task) => {
+  if(window.confirm("Are you sure to delete this task ")){
+  dispatch(actions.deleteTask(task.id))
+  }
+  
+}
+
   return (
     <div className='outer-container'>
       <div className='container'>
@@ -56,6 +87,8 @@ const Tasks = () => {
                   placeholder='Task Title'
                   className='text-box'
                   id='task-title'
+                  value={taskTitle}
+                  onChange={(e)=>setTaskTitle(e.target.value)}
                 />
               </div>
             </div>
@@ -72,6 +105,8 @@ const Tasks = () => {
                   placeholder='Task Date and Time'
                   className='text-box'
                   id='task-date-time'
+                  value={ taskDateTime}
+                  onChange={e=>setTaskDateTime(e.target.value)}
                 />
               </div>
             </div>
@@ -112,11 +147,12 @@ const Tasks = () => {
               </div>
               <div className='task-subtitle'>
                 <i className='far fa-clock'></i>{' '}
-                <span className='task-subtitle-text'> {task.taskDateTime}</span>
+                <span className='task-subtitle-text'> 
+                {toDisplayableDateFormat(task.taskDateTime)}</span>
               </div>
             </div>
             <div className='task-options'>
-              <button className='icon-button' title='Delete'>
+              <button className='icon-button' title='Delete' onClick={()=>onDeleteClick(task)}>
                 &times;
               </button>
             </div>
