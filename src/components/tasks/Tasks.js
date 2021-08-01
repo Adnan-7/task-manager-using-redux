@@ -12,13 +12,17 @@ import {toDisplayableDateFormat} from   "../../utils";
  
 
 const Tasks = () => {
-//get state from redux store
-  const tasks = useSelector(state => state.tasks)
 
 //state
   const [taskTitle, setTaskTitle]=useState('');
   const [taskDateTime, setTaskDateTime]=useState('');
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
+  const [search, setSearch] =useState('');
+
+  //get state from redux store
+  const tasks = useSelector(state => state.tasks);
+  const filteredTasks=tasks.filter(task=>task.taskTitle.toLowerCase().includes(search.toLowerCase()));
+
 
 
   //create dispatch fucntion
@@ -133,13 +137,13 @@ const onDeleteClick=(task) => {
         </Collapsible>
 
         <div className='search-box'>
-          <input type='search' placeholder='Search' />
+          <input type='search' placeholder='Search' value={search} onChange={e=>setSearch(e.target.value)}/>
           <i className='fa fa-search'></i>
         </div>
 
         <div className='content-body'>
           {/* task starts */}
-          {tasks.map(task=><div className='task' key={task.id} >
+          {filteredTasks.map(task=><div className='task' key={task.id} >
             <div className='task-body'>
               <div className='task-title'>
                 <i className='fa fa-thumbtack'></i>
